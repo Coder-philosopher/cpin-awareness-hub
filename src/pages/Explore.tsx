@@ -1,8 +1,75 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Rocket, Construction, Heart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Rocket, Construction, Heart, Camera, Upload, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 const Explore = () => {
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [predictionResult, setPredictionResult] = useState<any>(null);
+
+  const handleAuth = () => {
+    if (username === 'admin@cpin' && password === 'admin@cpin') {
+      setIsAuthenticated(true);
+      setIsAuthDialogOpen(false);
+      setIsImageDialogOpen(true);
+      toast.success('Authentication successful!');
+    } else {
+      toast.error('Invalid credentials. Please use admin@cpin for both username and password.');
+    }
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setPredictionResult(null);
+    }
+  };
+
+  const handlePredict = async () => {
+    if (!selectedFile) {
+      toast.error('Please select an image first');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append('data', selectedFile);
+
+      const response = await fetch('https://huggingface.co/spaces/dgjdxuzikyergbowsie/model139/api/predict/', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer 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'
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Prediction failed');
+      }
+
+      const result = await response.json();
+      setPredictionResult(result);
+      toast.success('Plastic recognition completed!');
+    } catch (error) {
+      toast.error('Failed to analyze image. Please try again.');
+      console.error('Prediction error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto text-center">
@@ -17,6 +84,128 @@ const Explore = () => {
             We're working hard to bring you exciting new features that will enhance your 
             experience with CPIN and help make an even bigger impact in the fight against plastic pollution.
           </p>
+        </div>
+
+        {/* Plastic Recognition Feature */}
+        <div className="mb-12">
+          <Card className="bg-card-gradient shadow-card border-0 max-w-2xl mx-auto">
+            <CardHeader>
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <Camera className="w-8 h-8 text-white" />
+              </div>
+              <CardTitle className="font-heading text-2xl">Try Our Plastic Recognition AI</CardTitle>
+              <p className="text-muted-foreground">
+                Upload an image and let our AI identify plastic materials and pollution types
+              </p>
+            </CardHeader>
+            <CardContent>
+              <Dialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    variant="hero" 
+                    size="lg" 
+                    className="w-full"
+                    onClick={() => {
+                      if (isAuthenticated) {
+                        setIsImageDialogOpen(true);
+                      } else {
+                        setIsAuthDialogOpen(true);
+                      }
+                    }}
+                  >
+                    <Camera className="w-5 h-5 mr-2" />
+                    {isAuthenticated ? 'Upload Image' : 'Sign In to Continue'}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Sign In Required</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="username">Username</Label>
+                      <Input
+                        id="username"
+                        placeholder="Enter username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="password">Password</Label>
+                      <Input
+                        id="password"
+                        type="password"
+                        placeholder="Enter password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Demo credentials: admin@cpin / admin@cpin
+                    </p>
+                    <Button onClick={handleAuth} className="w-full">
+                      Sign In
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
+              {/* Image Upload Dialog */}
+              <Dialog open={isImageDialogOpen} onOpenChange={setIsImageDialogOpen}>
+                <DialogContent className="sm:max-w-lg">
+                  <DialogHeader>
+                    <DialogTitle>Plastic Recognition AI</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="image-upload">Select Image</Label>
+                      <Input
+                        id="image-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileSelect}
+                        className="cursor-pointer"
+                      />
+                    </div>
+                    
+                    {selectedFile && (
+                      <div className="text-sm text-muted-foreground">
+                        Selected: {selectedFile.name}
+                      </div>
+                    )}
+
+                    <Button 
+                      onClick={handlePredict} 
+                      disabled={!selectedFile || isLoading}
+                      className="w-full"
+                    >
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Analyzing...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Analyze Image
+                        </>
+                      )}
+                    </Button>
+
+                    {predictionResult && (
+                      <div className="mt-4 p-4 bg-accent/10 rounded-lg">
+                        <h4 className="font-semibold mb-2">Analysis Result:</h4>
+                        <pre className="text-sm whitespace-pre-wrap">
+                          {JSON.stringify(predictionResult, null, 2)}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
