@@ -141,9 +141,6 @@ const Explore = () => {
                         onChange={(e) => setPassword(e.target.value)}
                       />
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      Demo credentials: admin@cpin / admin@cpin
-                    </p>
                     <Button onClick={handleAuth} className="w-full">
                       Sign In
                     </Button>
