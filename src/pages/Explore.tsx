@@ -47,7 +47,7 @@ const Explore = () => {
       const formData = new FormData();
       formData.append('image', selectedFile);
 
-      const response = await fetch('http://dgjdxuzikyergbowsie-model139.hf.space', {
+      const response = await fetch('https://dgjdxuzikyergbowsie-model139.hf.space', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer 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'
