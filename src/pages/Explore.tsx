@@ -47,7 +47,7 @@ const Explore = () => {
       const formData = new FormData();
       formData.append('data', selectedFile);
 
-      const response = await fetch('https://huggingface.co/spaces/dgjdxuzikyergbowsie/model139/api/predict/', {
+      const response = await fetch('https://dgjdxuzikyergbowsie--model139.hf.space/', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer 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'
