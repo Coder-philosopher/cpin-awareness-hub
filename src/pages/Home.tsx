@@ -12,8 +12,15 @@ import {
   Leaf,
   AlertTriangle,
   Waves,
-  Fish
+  Fish,
+  HelpCircle
 } from 'lucide-react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const Home = () => {
   const features = [
@@ -161,6 +168,60 @@ const Home = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <HelpCircle className="w-16 h-16 text-primary mx-auto mb-6" />
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Get answers to common questions about CPIN and plastic pollution solutions.
+            </p>
+          </div>
+
+          <div className="bg-card-gradient rounded-2xl p-8 shadow-card">
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger className="text-left">What is CPIN and how does it work?</AccordionTrigger>
+                <AccordionContent>
+                  CPIN (Circular Plastic Intelligence Nexus) is a comprehensive educational platform that combines artificial intelligence with environmental science to tackle plastic pollution. We provide interactive quizzes, expert blogs, and real-time news to help individuals understand the plastic crisis and take meaningful action. Our platform uses data-driven insights to promote circular economy principles and sustainable alternatives.
+                </AccordionContent>
+              </AccordionItem>
+              
+              <AccordionItem value="item-2">
+                <AccordionTrigger className="text-left">How can I reduce plastic pollution on an individual level?</AccordionTrigger>
+                <AccordionContent>
+                  There are many ways to reduce your plastic footprint: Use reusable bags, bottles, and containers; Choose products with minimal packaging; Support companies with sustainable practices; Properly recycle and dispose of plastics; Participate in local cleanup events; Educate others about the plastic crisis; Choose biodegradable alternatives when possible; and reduce single-use items like straws, cutlery, and takeaway containers.
+                </AccordionContent>
+              </AccordionItem>
+              
+              <AccordionItem value="item-3">
+                <AccordionTrigger className="text-left">What are the best eco-friendly alternatives to common plastic items?</AccordionTrigger>
+                <AccordionContent>
+                  Here are sustainable swaps: Glass or stainless steel water bottles instead of plastic bottles; Bamboo or metal straws instead of plastic straws; Beeswax wraps instead of plastic wrap; Canvas or jute bags instead of plastic bags; Wooden or bamboo toothbrushes instead of plastic ones; Soap bars instead of liquid soap in plastic bottles; Refillable containers for bulk items; and biodegradable cleaning products in glass containers.
+                </AccordionContent>
+              </AccordionItem>
+              
+              <AccordionItem value="item-4">
+                <AccordionTrigger className="text-left">Why is plastic pollution particularly dangerous for marine life?</AccordionTrigger>
+                <AccordionContent>
+                  Marine animals often mistake plastic debris for food, leading to malnutrition, internal injuries, and death. Microplastics enter the food chain, affecting entire ecosystems. Plastic pollution creates dead zones in oceans, disrupts breeding patterns, and causes entanglement injuries. Chemical pollutants from plastics can cause hormonal disruption and reproductive issues in marine species, ultimately threatening biodiversity and ecosystem balance.
+                </AccordionContent>
+              </AccordionItem>
+              
+              <AccordionItem value="item-5">
+                <AccordionTrigger className="text-left">How long does it take for different types of plastic to decompose?</AccordionTrigger>
+                <AccordionContent>
+                  Plastic decomposition times vary significantly: Plastic bags take 10-20 years; Disposable diapers take 250-500 years; Plastic bottles take 450+ years; Styrofoam containers take 500+ years; Fishing lines take 600+ years; and some plastics may never fully decompose, instead breaking down into harmful microplastics that persist in the environment indefinitely, continuing to impact wildlife and human health.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
         </div>
       </section>
