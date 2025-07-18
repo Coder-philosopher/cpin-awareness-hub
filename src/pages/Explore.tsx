@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Label } from '@/components/ui';
+import { Button, Input, Label } from '@/components/ui/dialog';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Loader2, Upload } from 'lucide-react';
 import { toast } from 'sonner';
