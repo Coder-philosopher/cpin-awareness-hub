@@ -24,7 +24,7 @@ const Explore = () => {
       setIsImageDialogOpen(true);
       toast.success('Authentication successful!');
     } else {
-      toast.error('Invalid credentials. Please use admin@cpin for both username and password.');
+      toast.error('Invalid credentials. Please use correct username and password.');
     }
   };
 
@@ -45,7 +45,7 @@ const Explore = () => {
     setIsLoading(true);
     try {
       const formData = new FormData();
-      formData.append('data', selectedFile);
+      formData.append('image', selectedFile);
 
       const response = await fetch('https://dgjdxuzikyergbowsie-model139.hf.space/predict/', {
         method: 'POST',
