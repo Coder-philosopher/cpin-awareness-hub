@@ -239,7 +239,7 @@ const Home = () => {
               Take our comprehensive quiz and discover actionable steps you can take today.
             </p>
             <Button variant="hero" size="xl" asChild>
-              <Link to="/quizzes">Test Your Knowledge About Plastic Pollution!</Link>
+              <Link to="/quizzes">Test Your Knowledge</Link>
             </Button>
           </div>
         </div>
