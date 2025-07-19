@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Rocket, Construction, Heart, Camera, Upload, Loader2 } from 'lucide-react';
+import { Rocket, Construction, Heart, Camera, Upload, Loader2, BarChart3 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 const Explore = () => {
+  const navigate = useNavigate();
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
   const [username, setUsername] = useState('');
@@ -86,9 +88,10 @@ const Explore = () => {
           </p>
         </div>
 
-        {/* Plastic Recognition Feature */}
-        <div className="mb-12">
-          <Card className="bg-card-gradient shadow-card border-0 max-w-2xl mx-auto">
+        {/* Advanced Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          {/* Plastic Recognition Feature */}
+          <Card className="bg-card-gradient shadow-card border-0">
             <CardHeader>
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <Camera className="w-8 h-8 text-white" />
@@ -201,6 +204,30 @@ const Explore = () => {
                   </div>
                 </DialogContent>
               </Dialog>
+            </CardContent>
+          </Card>
+
+          {/* Pyrolysis Dashboard Feature */}
+          <Card className="bg-card-gradient shadow-card border-0">
+            <CardHeader>
+              <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="w-8 h-8 text-primary" />
+              </div>
+              <CardTitle className="font-heading text-2xl">See Pyrolysis Dashboard</CardTitle>
+              <p className="text-muted-foreground">
+                Monitor real-time data from our pyrolyser model converting thermoplastics into fuels
+              </p>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                variant="hero" 
+                size="lg" 
+                className="w-full"
+                onClick={() => navigate('/dashboard')}
+              >
+                <BarChart3 className="w-5 h-5 mr-2" />
+                View Dashboard
+              </Button>
             </CardContent>
           </Card>
         </div>

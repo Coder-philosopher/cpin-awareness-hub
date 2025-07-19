@@ -10,6 +10,7 @@ import Quizzes from "./pages/Quizzes";
 import News from "./pages/News";
 import Blogs from "./pages/Blogs";
 import Explore from "./pages/Explore";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
               <Route path="/news" element={<News />} />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/explore" element={<Explore />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
