@@ -23,54 +23,31 @@ const Explore = () => {
     if (username === 'admin@cpin' && password === 'admin@cpin') {
       setIsAuthenticated(true);
       setIsAuthDialogOpen(false);
-      setIsImageDialogOpen(true);
       toast.success('Authentication successful!');
     } else {
       toast.error('Invalid credentials. Please use correct username and password.');
     }
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-      setPredictionResult(null);
-    }
-  };
+ const plasticTypes = [
+    { class: 'Class-1.Battery', description: 'Plastic components related to power storage devices.' },
+    { class: 'Class-2.Keyboard', description: 'Plastic parts of a computer keyboard.' },
+    { class: 'Class-3.Microwave', description: 'Plastic elements in microwave ovens.' },
+    { class: 'Class-4.Mobile', description: 'Plastic parts of a mobile phone.' },
+    { class: 'Class-5.Mouse', description: 'Plastic casing of a computer mouse.' },
+    { class: 'Class-6.Others', description: 'Miscellaneous plastic items that don\'t fit the other categories.' },
+    { class: 'Class-7.PC', description: 'Plastic components of a personal computer.' },
+    { class: 'Class-8.PCB', description: 'Plastic parts or casings of printed circuit boards.' },
+    { class: 'Class-9.PE', description: 'Polyethylene, a common plastic used in various products.' },
+    { class: 'Class-10.PET', description: 'Polyethylene terephthalate, a widely used plastic in bottles and packaging.' },
+    { class: 'Class-11.PP', description: 'Polypropylene, a plastic commonly used in packaging and containers.' },
+    { class: 'Class-12.PS', description: 'Polystyrene, used in disposable plastic products.' },
+    { class: 'Class-13.Player', description: 'Plastic casing of electronic media players (e.g., MP3 players).' },
+    { class: 'Class-14.Printer', description: 'Plastic parts of a printer.' },
+    { class: 'Class-15.Television', description: 'Plastic housing or components of a television.' },
+    { class: 'Class-16.Washing Machine', description: 'Plastic parts in washing machines.' }
+];
 
-  const handlePredict = async () => {
-    if (!selectedFile) {
-      toast.error('Please select an image first');
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append('image', selectedFile);
-
-      const response = await fetch('https://dgjdxuzikyergbowsie-model139.hf.space/predict/', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer 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'
-        },
-        body: formData
-      });
-
-      if (!response.ok) {
-        throw new Error('Prediction failed');
-      }
-
-      const result = await response.json();
-      setPredictionResult(result);
-      toast.success('Plastic recognition completed!');
-    } catch (error) {
-      toast.error('Failed to analyze image. Please try again.');
-      console.error('Prediction error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">
@@ -80,10 +57,10 @@ const Explore = () => {
             <Rocket className="w-12 h-12 text-white" />
           </div>
           <h1 className="text-4xl md:text-5xl font-heading font-bold text-foreground mb-6">
-            Advanced Features Coming Soon!
+            Try Advanced Features
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            We're working hard to bring you exciting new features that will enhance your 
+            We're working hard to bring you exciting new features that will enhance your
             experience with CPIN and help make an even bigger impact in the fight against plastic pollution.
           </p>
         </div>
@@ -98,112 +75,79 @@ const Explore = () => {
               </div>
               <CardTitle className="font-heading text-2xl">Try Our Plastic Recognition AI</CardTitle>
               <p className="text-muted-foreground">
-                Upload an image and let our AI identify plastic materials and pollution types
+                {isAuthenticated
+                  ? 'You can now explore the advanced model for plastic recognition.'
+                  : 'Upload an image and let our AI identify plastic materials and pollution types.'}
               </p>
             </CardHeader>
             <CardContent>
-              <Dialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button 
-                    variant="hero" 
-                    size="lg" 
-                    className="w-full"
-                    onClick={() => {
-                      if (isAuthenticated) {
-                        setIsImageDialogOpen(true);
-                      } else {
-                        setIsAuthDialogOpen(true);
-                      }
-                    }}
+              {isAuthenticated ? (
+                <div>
+                  <a
+                    href="https://dgjdxuzikyergbowsie-model139.hf.space/predict/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block px-4 py-2 rounded-md text-sm font-heading text-white bg-gradient-to-r from-indigo-600 to-pink-500 hover:from-indigo-700 hover:to-pink-600 transition-all duration-200 ease-in-out"
                   >
-                    <Camera className="w-5 h-5 mr-2" />
-                    {isAuthenticated ? 'Upload Image' : 'Sign In to Continue'}
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Sign In Required</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="username">Username</Label>
-                      <Input
-                        id="username"
-                        placeholder="Enter username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="password">Password</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="Enter password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </div>
-                    <Button onClick={handleAuth} className="w-full">
-                      Sign In
-                    </Button>
+                    Check The Waste Type Here
+                  </a>
+                  <div className="mt-6">
+                    <h3 className="text-xl font-semibold">Plastic Types:</h3>
+                    <ul className="list-disc pl-6 text-left text-muted-foreground">
+                      {plasticTypes.map((item, index) => (
+                        <li key={index}>
+                          <strong>{item.class}</strong>: {item.description}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                </DialogContent>
-              </Dialog>
-
-              {/* Image Upload Dialog */}
-              <Dialog open={isImageDialogOpen} onOpenChange={setIsImageDialogOpen}>
-                <DialogContent className="sm:max-w-lg">
-                  <DialogHeader>
-                    <DialogTitle>Plastic Recognition AI</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="image-upload">Select Image</Label>
-                      <Input
-                        id="image-upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileSelect}
-                        className="cursor-pointer"
-                      />
-                    </div>
-                    
-                    {selectedFile && (
-                      <div className="text-sm text-muted-foreground">
-                        Selected: {selectedFile.name}
-                      </div>
-                    )}
-
-                    <Button 
-                      onClick={handlePredict} 
-                      disabled={!selectedFile || isLoading}
+                </div>
+              ) : (
+                <Dialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="hero"
+                      size="lg"
                       className="w-full"
+                      onClick={() => {
+                        setIsAuthDialogOpen(true);
+                      }}
                     >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Analyzing...
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="w-4 h-4 mr-2" />
-                          Analyze Image
-                        </>
-                      )}
+                      <Camera className="w-5 h-5 mr-2" />
+                      Sign In to Continue
                     </Button>
-
-                    {predictionResult && (
-                      <div className="mt-4 p-4 bg-accent/10 rounded-lg">
-                        <h4 className="font-semibold mb-2">Analysis Result:</h4>
-                        <pre className="text-sm whitespace-pre-wrap">
-                          {JSON.stringify(predictionResult, null, 2)}
-                        </pre>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Sign In Required</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="username">Username</Label>
+                        <Input
+                          id="username"
+                          placeholder="Enter username"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                        />
                       </div>
-                    )}
-                  </div>
-                </DialogContent>
-              </Dialog>
+                      <div>
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                          id="password"
+                          type="password"
+                          placeholder="Enter password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                      </div>
+                      <Button onClick={handleAuth} className="w-full">
+                        Sign In
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              )}
             </CardContent>
           </Card>
 
@@ -219,9 +163,9 @@ const Explore = () => {
               </p>
             </CardHeader>
             <CardContent>
-              <Button 
-                variant="hero" 
-                size="lg" 
+              <Button
+                variant="hero"
+                size="lg"
                 className="w-full"
                 onClick={() => navigate('/dashboard')}
               >
